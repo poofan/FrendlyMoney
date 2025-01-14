@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Транзакции</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/account_style.css">
+</head>
+<body>
+    <!-- Заголовок -->
+    <header>
+        <nav>
+            <a href="/" class="nav-link">Главная</a>
+            <a th:if="${#authorization.expression('isAnonymous()')}" href="/register">Регистрация</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/account" class="nav-link">Личный кабинет</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/transactions" class="nav-link active">Транзакции</a>
+            <a th:if="${#authorization.expression('isAnonymous()')}" href="/login">Вход</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/logout" class="nav-link">Выход</a>
+        </nav>
+    </header>
+
+    <!-- Основное содержимое -->
+    <h1>История транзакций</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Дата</th>
+                <th>Тип</th>
+                <th>Сумма</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.timestamp}">Дата</td>
+                <td th:text="${transaction.type}">Тип</td>
+                <td th:text="${transaction.amount}">Сумма</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Ссылки для навигации -->
+    <div class="navigation">
+        <a href="/account" class="btn">Назад в личный кабинет</a>
+    </div>
+</body>
+</html>

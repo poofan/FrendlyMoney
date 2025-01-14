@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Личный кабинет</title>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/account_style.css">
+</head>
+<body>
+	<!-- Заголовок -->
+	<header>
+		<nav>
+            <a href="/" class="nav-link">Главная</a>
+            <a th:if="${#authorization.expression('isAnonymous()')}" href="/register">Регистрация</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/account" class="nav-link">Личный кабинет</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/transactions" class="nav-link active">Транзакции</a>
+            <a th:if="${#authorization.expression('isAnonymous()')}" href="/login">Вход</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/logout" class="nav-link">Выход</a>
+        </nav>
+	</header>
+
+	<!-- Основное содержимое -->
+	<h1>Личный кабинет</h1>
+	<p>
+		Ваш баланс: <span th:text="${balance}">0.0</span> руб.
+	</p>
+
+	<h2>Пополнить баланс</h2>
+	<form action="/account/recharge" method="post">
+		<input type="number" name="amount" placeholder="Сумма" required />
+		<button type="submit">Пополнить</button>
+	</form>
+
+	<h2>История транзакций</h2>
+	<table>
+		<thead>
+			<tr>
+				<th>Дата</th>
+				<th>Тип</th>
+				<th>Сумма</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="transaction : ${transactions}">
+				<td th:text="${transaction.timestamp}">Дата</td>
+				<td th:text="${transaction.type}">Тип</td>
+				<td th:text="${transaction.amount}">Сумма</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- Сообщение -->
+	<p th:text="${message}"
+		th:classappend="${success} ? 'success' : 'error'"
+		class="status-message"></p>
+
+	<!-- Ссылки для навигации -->
+	<div class="navigation">
+		<a href="/transactions" class="btn">Просмотреть все транзакции</a> <a
+			href="/settings" class="btn">Настройки</a>
+	</div>
+</body>
+</html>

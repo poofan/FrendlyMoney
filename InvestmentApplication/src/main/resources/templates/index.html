@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Главная</title>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/account_style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <header>
+            <nav>
+                <a href="/" class="nav-link">Главная</a>
+                <a th:if="${#authorization.expression('isAnonymous()')}" href="/register">Регистрация</a>
+                <a th:if="${#authorization.expression('isAuthenticated()')}" href="/account" class="nav-link">Личный кабинет</a>
+                <a th:if="${#authorization.expression('isAuthenticated()')}" href="/transactions" class="nav-link active">Транзакции</a>
+                <a th:if="${#authorization.expression('isAnonymous()')}" href="/login">Вход</a>
+                <a th:if="${#authorization.expression('isAuthenticated()')}" href="/logout" class="nav-link">Выход</a>
+            </nav>
+        </header>
+
+        <!-- Основное содержимое -->
+        <h1>Добро пожаловать на платформу инвестиций</h1>
+
+        <div class="main-content">
+            <!-- Новостная лента -->
+            <div class="news-feed">
+                <h2>Последние новости</h2>
+                <ul th:if="${newsList}" th:each="news : ${newsList}">
+                    <li>
+                        <div class="news-item">
+                            <img th:src="${news.imageUrl}" alt="News Image" class="news-image" />
+                            <div class="news-details">
+                                <span th:text="${news.time}"></span>
+                                <span th:text="${news.section}"></span>
+                                <a th:href="${news.link}" th:text="${news.title}" target="_blank"></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Котировки -->
+            <div class="quotes-section">
+                <h2>Котировки</h2>
+                <table class="quotes-table" th:if="${quotesBlocks}" th:each="block : ${quotesBlocks}">
+                    <thead>
+                        <tr>
+                            <th colspan="3" class="quotes-title" th:text="${block.quoteTitle}"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${block.headers}">
+                            <th th:each="header : ${block.headers}" th:text="${header}"></th>
+                        </tr>
+                        <tr th:each="line : ${block.lines}">
+                            <td th:text="${line.quoteIndex}"></td>
+                            <td th:text="${line.quoteName}"></td>
+                            <td th:text="${line.quoteValue}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Ссылки -->
+        <div class="navigation">
+            <a href="/account" class="btn">Перейти в личный кабинет</a>
+            <a href="/transactions" class="btn">Просмотреть транзакции</a>
+        </div>
+    </div>
+</body>
+
+</html>

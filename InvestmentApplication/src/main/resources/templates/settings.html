@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Настройки</title>
+<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/account_style.css">
+</head>
+<body>
+	<!-- Заголовок -->
+	<header>
+		<nav>
+            <a href="/" class="nav-link">Главная</a>
+            <a th:if="${#authorization.expression('isAnonymous()')}" href="/register">Регистрация</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/account" class="nav-link">Личный кабинет</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/transactions" class="nav-link active">Транзакции</a>
+            <a th:if="${#authorization.expression('isAnonymous()')}" href="/login">Вход</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/logout" class="nav-link">Выход</a>
+        </nav>
+	</header>
+
+	<!-- Основное содержимое -->
+	<h1>Настройки аккаунта</h1>
+
+	<!-- Форма для изменения имени -->
+	<h2>Изменить имя</h2>
+	<form action="/settings/update-name" method="post">
+		<label for="name">Новое имя:</label> <input type="text" id="name"
+			name="name" placeholder="Введите новое имя" required />
+		<button type="submit">Сохранить</button>
+	</form>
+
+	<!-- Форма для изменения пароля -->
+	<h2>Изменить пароль</h2>
+	<form action="/settings/update-password" method="post">
+		<label for="currentPassword">Текущий пароль:</label> <input
+			type="password" id="currentPassword" name="currentPassword"
+			placeholder="Введите текущий пароль" required /> <label
+			for="newPassword">Новый пароль:</label> <input type="password"
+			id="newPassword" name="newPassword"
+			placeholder="Введите новый пароль" required />
+
+		<button type="submit">Сохранить</button>
+	</form>
+
+	<!-- Уведомление об успешном/ошибочном изменении -->
+	<p th:text="${message}"
+		th:classappend="${success} ? 'success' : 'error'"
+		class="status-message"></p>
+
+	<!-- Кнопка для возврата -->
+	<div class="navigation">
+		<a href="/account" class="btn">Вернуться в личный кабинет</a>
+	</div>
+</body>
+</html>

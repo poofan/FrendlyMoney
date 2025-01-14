@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Создание учётной записи</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/account_style.css">
+</head>
+<body>
+<div class="container">
+<!-- Заголовок -->
+	<header>
+		<nav>
+            <a href="/" class="nav-link">Главная</a>
+            <a th:if="${#authorization.expression('isAnonymous()')}" href="/register">Регистрация</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/account" class="nav-link">Личный кабинет</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/transactions" class="nav-link active">Транзакции</a>
+            <a th:if="${#authorization.expression('isAnonymous()')}" href="/login">Вход</a>
+            <a th:if="${#authorization.expression('isAuthenticated()')}" href="/logout" class="nav-link">Выход</a>
+        </nav>
+	</header>
+    <h1>Форма регистрации</h1>
+    <form action="/api/auth/register" method="post">
+        <label for="email">Ваш email (будет в качестве логина):</label>
+        <input type="email" id="email" name="email" required />
+        <br />
+        <label for="password">Пароль:</label>
+        <input type="password" id="password" name="password" required />
+        <br/>
+        <br/>
+        <button type="submit">Создать учётную запись</button>
+    </form>
+    <a href="/login">Уже есть учётная запись? Вход</a>
+    </div>
+</body>
+</html>
